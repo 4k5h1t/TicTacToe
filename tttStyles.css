@@ -39,3 +39,14 @@ td {
   margin: 48px 40%;
   padding: 20px;
 }
+
+#p1 {
+  margin: 5px 40%;
+  padding: 20px;
+}
+
+#p2 {
+  margin: 48px 40%;
+  padding: 20px;
+  background-color: greenyellow;
+}

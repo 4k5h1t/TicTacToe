@@ -1,7 +1,56 @@
 let playerSymbol = 'X'
 let gameEnded = false
+let gameStarted = false
 let prevMove = null
+let aiPrevMove = null
 let moveCount = 0
+let mode = 2
+
+document.getElementById("p1").addEventListener("click", 
+function() {
+    if(!gameStarted){
+      mode = 1
+      document.getElementById("p1").style.backgroundColor="greenyellow";
+      document.getElementById("p2").style.backgroundColor="grey"; 
+    }   
+  }
+);
+
+document.getElementById("p2").addEventListener("click", 
+function() {
+
+  if(!gameStarted){
+      mode = 2
+      document.getElementById("p2").style.backgroundColor="greenyellow";
+      document.getElementById("p1").style.backgroundColor="grey";    
+    }
+  }
+);
+
+function aiMove(){
+
+  moveCount += 1
+
+  for (let j = 1; j <= 9; j++){
+
+    let x = Math.random() * 8;
+    x += 1
+    x = Math.floor(x)
+
+    if (document.getElementById(x.toString()).innerHTML === "" && !gameEnded) {
+
+      aiPrevMove = x
+
+      document.getElementById(x.toString()).innerHTML = playerSymbol;
+      document.getElementById(x.toString()).classList.add(playerSymbol.toLowerCase());
+
+      checkWin();
+      checkTie();
+      
+      return
+    }
+  }  
+}
 
 for (let i = 1; i <= 9; i++) {
   document.getElementById(i.toString()).addEventListener("click", 
@@ -14,6 +63,7 @@ for (let i = 1; i <= 9; i++) {
         this.classList.add(playerSymbol.toLowerCase());
 
         prevMove = i
+        gameStarted = true
 
         checkWin();
         checkTie();
@@ -22,6 +72,14 @@ for (let i = 1; i <= 9; i++) {
           playerSymbol = "O"
         else
           playerSymbol = "X"
+
+        if (mode === 1){
+          aiMove();
+          if (playerSymbol === "X")
+            playerSymbol = "O"
+          else
+            playerSymbol = "X"
+        }
 
       }
 
@@ -57,8 +115,10 @@ function() {
       document.getElementById(i.toString()).classList.remove("o");
       document.getElementById(i.toString()).classList.remove("win");
       
+      gameStarted = false
       gameEnded = false;
       playerSymbol = 'X';
+      aiPrevMove = null
       prevMove = null
       moveCount = 0
     }
@@ -69,13 +129,28 @@ document.getElementById("undo").addEventListener("click",
 function() {
     document.getElementById(prevMove.toString()).innerHTML = "";
 
+    if (gameEnded){
+      gameEnded = true
+      
+    }
+
     if (playerSymbol === "X")
       playerSymbol = "O"
     else
       playerSymbol = "X"
 
+    if (mode === 1){
+      document.getElementById(aiPrevMove.toString()).innerHTML = "";
+      if (playerSymbol === "X")
+        playerSymbol = "O"
+      else
+        playerSymbol = "X"
+
+      moveCount -= 1
+    }
+
     moveCount -= 1
-    
+
   }
 );
 
